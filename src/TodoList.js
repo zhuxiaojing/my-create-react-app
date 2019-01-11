@@ -8,6 +8,9 @@ class TodoList extends Component {   //等价于：class App extends React.Compo
       list:['learnReact','learEnglish'],
       inputValue:''
     }
+    this.handleInputChange=this.handleInputChange.bind(this)
+    this.handleButtonClick=this.handleButtonClick.bind(this)
+    this.handleDelete=this.handleDelete.bind(this)
   }
   handleInputChange(e){
     this.setState({
@@ -26,19 +29,29 @@ class TodoList extends Component {   //等价于：class App extends React.Compo
     list.splice(index,1)
     this.setState({list})   //ES6的写法
   }
+  handleDelete(index){
+    const list=[...this.state.list]
+    list.splice(index,1)
+    this.setState({list})   //ES6的写法
+  }
+  getTodoItems(){
+    return (
+      this.state.list.map((item,index)=>{
+        return <TodoItem content={item} index={index} deleteItem={this.handleDelete.bind(this)} key={index}/>
+        // return <li key={index} onClick={this.handleItemClick.bind(this,index)}>{item}</li>
+      })
+    )
+  }
   render() {
     return (
       <div>
         <div>        
-          <input value={this.state.inputValue}  onChange={this.handleInputChange.bind(this)}/>
+          <input value={this.state.inputValue}  onChange={this.handleInputChange}/>
           <button onClick={this.handleButtonClick.bind(this)}>add</button>   
         </div>
         <ul>
           {
-            this.state.list.map((item,index)=>{
-              return <TodoItem content={item}/>
-              // return <li key={index} onClick={this.handleItemClick.bind(this,index)}>{item}</li>
-            })
+            this.getTodoItems()
           }
         </ul>
       </div>
